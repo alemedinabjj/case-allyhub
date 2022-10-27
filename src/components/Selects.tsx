@@ -46,7 +46,7 @@ export const Selects = ({ country, states, getFilteredStates, setGetFilteredStat
               .filter((item: any) => item?.country_code === getFilteredStates)
               .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
               .map((item: any) => (
-                <option key={item.code} value={item.code}>
+                <option key={item.code} value={item.name}>
                   {item.name}
                 </option>
               ))}
