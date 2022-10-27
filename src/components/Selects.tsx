@@ -20,6 +20,7 @@ export const Selects = ({ country, states, getFilteredStates, setGetFilteredStat
             id="country"
             className="border border-gray-300 rounded-md block p-1"
             onChange={(e) => setGetFilteredStates(e.target.value)}
+            required
           >
             <option value="">Selecione</option>
             {country.map((item: ICountryProps) => (
@@ -33,12 +34,19 @@ export const Selects = ({ country, states, getFilteredStates, setGetFilteredStat
           <label htmlFor="state" className="block text-sm font-medium text-gray-700">
             Estado
           </label>
-          <select name="state" id="state" className="border border-gray-300 rounded-md block p-1" onChange={(e) => setValueState(e.target.value)}>
+          <select
+            name="state"
+            id="state"
+            className="border border-gray-300 rounded-md block p-1"
+            onChange={(e) => setValueState(e.target.value)}
+            required
+          >
             <option value="">Selecione</option>
             {states
               .filter((item: any) => item?.country_code === getFilteredStates)
+              .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
               .map((item: any) => (
-                <option key={item.code} value={item.name}>
+                <option key={item.code} value={item.code}>
                   {item.name}
                 </option>
               ))}

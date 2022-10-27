@@ -102,8 +102,9 @@ export const DataPersonForm = () => {
               valueState={valueState}
               setValueState={setValueState}
             />
-            <button type="submit" className="bg-indigo-500 text-white rounded-md p-2 flex self-end hover:brightness-75 transition">
-              Enviar
+            <button type="submit" className="bg-indigo-500 text-white rounded-md p-2 flex self-end hover:brightness-75 transition items-center gap-2">
+              <IconBase name="PaperPlaneRight" className="h-5 w-5 text-white" aria-hidden="true" />
+              <span>Enviar</span>
             </button>
           </div>
         </form>

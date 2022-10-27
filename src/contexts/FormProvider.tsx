@@ -45,6 +45,12 @@ export const FormProvider = ({ children }: any) => {
 
     const emailValid = regExEmail.test(email);
 
+    //verificar cada campo se está vazio ou não e se o email é válido ou não
+    if (name === "" || email === "" || telephone === "" || cpf === "" || !emailValid) {
+      alert("Preencha todos os campos corretamente");
+      return;
+    }
+
     if (name && emailValid && telephone && cpf && valueState) {
       setShowData({
         id: id,
