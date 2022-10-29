@@ -1,12 +1,29 @@
 import { IconBase } from "../utils/Icons";
-import { IMaskInput } from "react-imask";
 import { useMemo } from "react";
 import { Selects } from "./Selects";
 import { useForm } from "../contexts/FormProvider";
+import { useForm as reactUseForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Input } from "./Input";
+
+const schema = yup.object().shape({
+  name: yup.string().required("Campo obrigatório"),
+  email: yup.string().required("Campo obrigatório").email("Email inválido"),
+  telephone: yup.string().required("Campo obrigatório"),
+  cpf: yup.string().required("Campo obrigatório"),
+});
 
 export const DataPersonForm = () => {
-  const { data, setData, country, states, getFilteredStates, setGetFilteredStates, valueState, setValueState, getCountry, getStates, submitForm } =
-    useForm();
+  const { country, states, getFilteredStates, setGetFilteredStates, valueState, setValueState, getCountry, getStates, submitForm } = useForm();
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = reactUseForm({
+    resolver: yupResolver(schema),
+  });
 
   useMemo(() => {
     getCountry();
@@ -16,79 +33,15 @@ export const DataPersonForm = () => {
   return (
     <div className="mt-10">
       <div className="flex-1 flex flex-col gap-2">
-        <form className="flex flex-col md:flex-row gap-4 m-auto" onSubmit={submitForm}>
+        <form className="flex flex-col md:flex-row gap-4 m-auto" onSubmit={handleSubmit(submitForm)}>
           <div className="flex flex-col">
             <h2>
               <span className="text-gray-400">1.</span> Dados pessoais
             </h2>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Nome
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                className="border border-gray-300 rounded-md block p-1"
-                placeholder="Jose da Silva"
-                value={data.name}
-                onChange={(e) => setData({ ...data, name: e.target.value })}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <IconBase name="Envelope" className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                </div>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 border border-gray-300 rounded-md p-1"
-                  placeholder="jose@example.com"
-                  value={data.email}
-                  onChange={(e) => setData({ ...data, email: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="telephone" className="block text-sm font-medium text-gray-700">
-                Telefone
-              </label>
-
-              <IMaskInput
-                mask="(00) 00000-0000"
-                unmask={true}
-                //@ts-ignore
-                name="telephone"
-                id="telephone"
-                className="border border-gray-300 rounded-md p-2"
-                placeholder="(00) 00000-0000"
-                value={data.telephone}
-                //@ts-ignore
-                onAccept={(value) => setData({ ...data, telephone: value })}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700">
-                CPF
-              </label>
-              <IMaskInput
-                mask="000.000.000-00"
-                unmask={true}
-                //@ts-ignore
-                placeholder="000.000.000-00"
-                className="border border-gray-300 rounded-md p-2"
-                value={data.cpf}
-                //@ts-ignore
-                onAccept={(value) => setData({ ...data, cpf: value })}
-              />
-            </div>
+            <Input label="Nome" type="text" placeholder="Digite seu nome" {...register("name")} error={errors.name} />
+            <Input label="Email" type="email" placeholder="Digite seu email" {...register("email")} error={errors.email} />
+            <Input label="Telefone" type="text" placeholder="Digite seu telefone" {...register("telephone")} error={errors.telephone} />
+            <Input label="CPF" type="text" placeholder="Digite seu CPF" {...register("cpf")} error={errors.cpf} />
           </div>
           <div className="flex flex-col justify-between">
             {" "}

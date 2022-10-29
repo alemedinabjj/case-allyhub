@@ -2,16 +2,13 @@ import { createContext, useContext, useState } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { regExEmail } from "../utils/regEx";
+import { useForm as reactUseForm, FieldValues, SubmitHandler } from "react-hook-form";
 
 export const FormContext = createContext({} as any);
 
 export const FormProvider = ({ children }: any) => {
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    telephone: "",
-    cpf: "",
-  });
+  const { register, handleSubmit, formState } = reactUseForm();
+
   const [showData, setShowData] = useState({
     id: "",
     name: "",
@@ -37,37 +34,24 @@ export const FormProvider = ({ children }: any) => {
     setStates(reponse.data);
   };
 
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm: SubmitHandler<FieldValues> = (values) => {
+    console.log("FOI");
+    console.log(values);
     const id = uuidv4();
-    e.preventDefault();
 
-    const { name, email, telephone, cpf } = data;
+    const showData = {
+      id,
+      name: values.name,
+      email: values.email,
+      telephone: values.telephone,
+      cpf: values.cpf,
+      country: getFilteredStates,
+      state: valueState,
+    };
 
-    const emailValid = regExEmail.test(email);
-
-    //verificar cada campo se está vazio ou não e se o email é válido ou não
-    if (name === "" || email === "" || telephone === "" || cpf === "" || !emailValid) {
-      alert("Preencha todos os campos corretamente");
-      return;
-    }
-
-    if (name && emailValid && telephone && cpf && valueState) {
-      setShowData({
-        id: id,
-        name,
-        email,
-        telephone,
-        cpf,
-        country: getFilteredStates,
-        state: valueState,
-      });
-      setData({ name: "", email: "", telephone: "", cpf: "" });
-      setListItems([...listItems, { name, email, telephone, cpf, id, country: getFilteredStates, state: valueState }]);
-      localStorage.setItem(
-        "listItems",
-        JSON.stringify([...listItems, { name, email, telephone, cpf, id, country: getFilteredStates, state: valueState }])
-      );
-    }
+    setListItems([...listItems, showData]);
+    localStorage.setItem("listItems", JSON.stringify([...listItems, showData]));
+    setShowData(showData);
   };
 
   const deleteItem = (id: string) => {
@@ -79,8 +63,6 @@ export const FormProvider = ({ children }: any) => {
   return (
     <FormContext.Provider
       value={{
-        data,
-        setData,
         states,
         setStates,
         country,
@@ -97,6 +79,9 @@ export const FormProvider = ({ children }: any) => {
         setListItems,
         submitForm,
         deleteItem,
+        register,
+        handleSubmit,
+        formState,
       }}
     >
       {children}
