@@ -10,7 +10,6 @@ export const InputBase = ({ label, name, type, error, ...rest }: any, ref: any) 
       <IMaskInput
         mask="000.000.000-00"
         unmask={false}
-        lazy={false}
         type={type}
         id={name}
         name={name}
@@ -30,7 +29,6 @@ export const InputBase = ({ label, name, type, error, ...rest }: any, ref: any) 
       <IMaskInput
         mask="(00) 00000-0000"
         unmask={false}
-        lazy={false}
         type={type}
         id={name}
         name={name}

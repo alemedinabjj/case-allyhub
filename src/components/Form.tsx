@@ -10,8 +10,19 @@ import { Input } from "./Input";
 const schema = yup.object().shape({
   name: yup.string().required("Campo obrigatório"),
   email: yup.string().required("Campo obrigatório").email("Email inválido"),
-  telephone: yup.string().required("Campo obrigatório"),
-  cpf: yup.string().required("Campo obrigatório"),
+  telephone: yup
+    .string()
+    .test("len", "Telefone inválido", (val) => {
+      return val?.length === 15;
+    })
+    .required("Campo obrigatório"),
+  cpf: yup
+    .string()
+    .test("len", "CPF inválido", (val) => {
+      const val_length_whitout_mask = val?.replace(/\D/g, "").length;
+      return val_length_whitout_mask === 11;
+    })
+    .required("Campo obrigatório"),
 });
 
 export const DataPersonForm = () => {
