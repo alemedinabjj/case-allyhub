@@ -1,7 +1,6 @@
 import { createContext, useContext, useState } from "react";
-import axios from "axios";
+import { api } from "../services/api";
 import { v4 as uuidv4 } from "uuid";
-import { regExEmail } from "../utils/regEx";
 import { useForm as reactUseForm, FieldValues, SubmitHandler } from "react-hook-form";
 
 export const FormContext = createContext({} as any);
@@ -25,12 +24,12 @@ export const FormProvider = ({ children }: any) => {
   const [valueState, setValueState] = useState("");
 
   const getCountry = async () => {
-    const reponse = await axios.get("https://amazon-api.sellead.com/country");
+    const reponse = await api.get("country");
     setCountry(reponse.data);
   };
 
   const getStates = async () => {
-    const reponse = await axios.get("https://amazon-api.sellead.com/city");
+    const reponse = await api.get("city");
     setStates(reponse.data);
   };
 
