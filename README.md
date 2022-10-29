@@ -12,7 +12,7 @@ React, Tailwindcss, Typescript, Vite.
 
 ##Lib's usadas: 
 
-Phosphor-react, react-imask.
+Phosphor-react, Yup(para validação de inputs), React Hook Form (para construção do formulário).
 
 
 ## Preview do case:
